@@ -1,0 +1,10 @@
+=== BATTLE ENGAGEMENT LOG ===
+
+--- ESCORT SHIP ATTACKS ---
+  (None)
+
+--- BATTLESHIP ATTACKS ---
+Escort ID 1 destroyed | Time: 36.08 s
+Escort ID 2 destroyed | Time: 36.08 s
+
+Summary: Destroyed = 2 | Battle Time = 36.08 s

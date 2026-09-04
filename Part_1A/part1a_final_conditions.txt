@@ -1,0 +1,6 @@
+=== FINAL BATTLEFIELD CONDITIONS ===
+Battleship: USS Iowa (BB-61) | Status: SURVIVED
+
+Escort Ships Status:
+ID: 1 | Type: ED | Status: DESTROYED
+ID: 2 | Type: EC | Status: DESTROYED

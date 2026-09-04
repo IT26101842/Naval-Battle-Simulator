@@ -1,0 +1,7 @@
+=== INITIAL BATTLEFIELD CONDITIONS ===
+Canvas Size: 100.00 x 100.00
+Battleship: USS Iowa (BB-61) (U) | Pos: (50.00, 50.00) | Vmax: 250.00
+
+Escort Ships Count: 2
+ID: 1 | Type: ED | Pos: (61.85, 38.94) | V: [49.5 - 160.6] | Angles: [21.7 - 71.7] | Impact: 0.05
+ID: 2 | Type: EC | Pos: (50.06, 72.03) | V: [41.9 - 193.7] | Angles: [17.5 - 42.5] | Impact: 0.07
