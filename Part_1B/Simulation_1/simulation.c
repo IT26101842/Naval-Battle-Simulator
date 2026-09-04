@@ -17,7 +17,6 @@ void run_simulation_1(Battleship *battleship,
 
         log_step_header(log_file, i + 1, num_points, battleship->x, battleship->y);
 
-        // 1. Escort ප්‍රහාර පරීක්ෂාව (is_destroyed == 1 යනු active නැව් වේ) 🛥️💥
         int hit_by_escort = 0;
         for (int j = 0; j < num_escorts; j++) {
             if (escorts[j].is_destroyed == 1) {
@@ -30,14 +29,12 @@ void run_simulation_1(Battleship *battleship,
             }
         }
 
-        // Battleship විනාශ වුවහොත් සටන අවසන් වේ 🛑
         if (hit_by_escort) {
             printf("Battleship sunk! Ending simulation.\n");
             if (log_file) fprintf(log_file, "Battleship sunk! Ending simulation.\n");
             break;
         }
 
-        // 2. Battleship ප්‍රතිප්‍රහාරය 🚢💥
         for (int j = 0; j < num_escorts; j++) {
             if (escorts[j].is_destroyed == 1) {
                 if (is_in_battleship_range(*battleship, escorts[j])) {
@@ -47,7 +44,6 @@ void run_simulation_1(Battleship *battleship,
             }
         }
 
-        // 3. සියලු Escort නැව් විනාශ වී ඇත්දැයි පරීක්ෂා කිරීම 🛑
         int remaining_escorts = 0;
         for (int j = 0; j < num_escorts; j++) {
             if (escorts[j].is_destroyed == 1) {
@@ -57,7 +53,7 @@ void run_simulation_1(Battleship *battleship,
 
         if (remaining_escorts == 0) {
             log_victory(log_file, i + 1);
-            break; // සතුරන් සියල්ල විනාශ වූ බැවින් ලූප් එක නතර වේ
+            break;
         }
     }
 

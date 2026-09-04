@@ -3,7 +3,6 @@
 
 #include "/home/zv/Desktop/Naval-Battle-Simulator/Part_1A/details.h"
 
-// Simulation 1 ධාවනය කිරීම 🚀
 void run_simulation_1(Battleship *battleship, 
                       EscortShip escorts[], 
                       int num_escorts, 
