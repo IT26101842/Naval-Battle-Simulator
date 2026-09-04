@@ -4,6 +4,7 @@
 #define GRAVITY 9.8
 #define MAX_ESCORT_SHIPS 50
 #define PI 3.14159265358979323846
+#define MAX_PATH_POINTS 100
 
 // data structure for escort ship
 typedef struct {
@@ -37,5 +38,11 @@ typedef struct {
     Battleship battleship;
     EscortShip escorts[MAX_ESCORT_SHIPS];
 } Battlefield;
+
+// Data structure for path points
+typedef struct {
+	double x;
+	double y;
+} Point;
 
 #endif
