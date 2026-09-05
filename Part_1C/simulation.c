@@ -53,6 +53,40 @@ void run_battle_simulation(
 
         log_step_info(log, step, steps, b->x, b->y, is_jammed, b_min_angle, jam_step);
 
+        // shots from escortship to battleship
+        for (int i = 0; i < n_escorts; i++) {
+            if (escorts[i].is_destroyed != 1 || has_fired[i]) continue;
+
+            double d = calculate_distance(escorts[i].x, escorts[i].y, b->x, b->y);
+            double angle;
+            if (find_elevation_angle(d, escorts[i].max_velocity, escorts[i].min_angle, escorts[i].max_angle, &angle)) {
+                has_fired[i] = 1;
+                cumulative_damage += escorts[i].impact_power; // calculating the impact
+                
+                double t = calculate_time_of_flight(escorts[i].max_velocity, angle);
+                log_attack_event(log, "Escort", escorts[i].id, "Battleship", 0, d, angle, t);
+                printf("💥 Impact Power: +%.2f | Cumulative Damage: %.2f%%\n", 
+                       escorts[i].impact_power, cumulative_damage * 100.0);
+                if (log) {
+                    fprintf(log, "💥 Impact Power: +%.2f | Cumulative Damage: %.2f%%\n", 
+                            escorts[i].impact_power, cumulative_damage * 100.0);
+                }
+
+                // if the damage more than 100% it will destroyed
+                if (cumulative_damage >= 1.0) {
+                    b_sunk = 1;
+                    b->is_destroyed = 0;
+                    end_step = step;
+                    printf("🚨 Battleship was SUNK at step %d!\n", step);
+                    if (log) fprintf(log, "🚨 Battleship was SUNK at step %d!\n", step);
+                    break;
+                }
+            }
+        }
+
+        // stop the battle step if the battleship is already sunk
+        if (b_sunk) break;
+
         // shots from battleship to escortships
         for (int i = 0; i < n_escorts; i++) {
             if (escorts[i].is_destroyed != 1) continue;
@@ -77,38 +111,6 @@ void run_battle_simulation(
             end_step = step;
             break;
         }
-
-        // shots from escortship to battleship
-        for (int i = 0; i < n_escorts; i++) {
-            if (escorts[i].is_destroyed != 1 || has_fired[i]) continue;
-
-            double d = calculate_distance(escorts[i].x, escorts[i].y, b->x, b->y);
-            double angle;
-            if (find_elevation_angle(d, escorts[i].max_velocity, escorts[i].min_angle, escorts[i].max_angle, &angle)) {
-                has_fired[i] = 1;
-                cumulative_damage += escorts[i].impact_power; // calculating the impact
-                
-                double t = calculate_time_of_flight(escorts[i].max_velocity, angle);
-                log_attack_event(log, "Escort", escorts[i].id, "Battleship", 0, d, angle, t);
-                printf("💥 Impact Power: +%.2f | Cumulative Damage: %.2f%%\n", 
-                       escorts[i].impact_power, cumulative_damage * 100.0);
-                if (log) {
-                    fprintf(log, "💥 Impact Power: +%.2f | Cumulative Damage: %.2f%%\n", 
-                            escorts[i].impact_power, cumulative_damage * 100.0);
-                }
-
-                if (cumulative_damage >= 1.0) { // if the damage more than 100% it will destroyed
-                    b_sunk = 1;
-                    b->is_destroyed = 0;
-                    end_step = step;
-                    printf("🚨 Battleship was SUNK at step %d!\n", step);
-                    if (log) fprintf(log, "🚨 Battleship was SUNK at step %d!\n", step);
-                    break;
-                }
-            }
-        }
-
-        if (b_sunk) break;
     }
 
     log_summary(log, b_sunk, cumulative_damage, end_step);
