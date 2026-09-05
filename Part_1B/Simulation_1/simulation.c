@@ -2,6 +2,7 @@
 #include "/home/zv/Desktop/Naval-Battle-Simulator/Part_1A/physics.h"
 #include "files.h"
 
+// Defining Function for move the battleship,check the conditions and so on
 void run_simulation_1(Battleship *battleship, 
                       EscortShip escorts[], 
                       int num_escorts, 
@@ -11,6 +12,7 @@ void run_simulation_1(Battleship *battleship,
     
     FILE *log_file = open_log_file("simulation1_full_log.txt");
 
+    // Moving the battleship round by round as the user input
     for (int i = 0; i < num_points; i++) {
         battleship->x = path[i].x;
         battleship->y = path[i].y;
@@ -29,6 +31,7 @@ void run_simulation_1(Battleship *battleship,
             }
         }
 
+	// Checking condition for check the battleship is hit by escortship
         if (hit_by_escort) {
             printf("Battleship sunk! Ending simulation.\n");
             if (log_file) fprintf(log_file, "Battleship sunk! Ending simulation.\n");
