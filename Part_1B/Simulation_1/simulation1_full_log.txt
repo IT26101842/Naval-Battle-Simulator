@@ -1,0 +1,21 @@
+========================================
+     PART 1-B: SIMULATION 1 LOG         
+========================================
+
+
+--- Step 1 / 2 ---
+Battleship moved to: (180.94, 467.54)
+💥 Escort Ship #2 destroyed the Battleship!
+Battleship sunk! Ending simulation.
+
+========================================
+         SIMULATION 1 SUMMARY           
+========================================
+Battleship Status : DESTROYED (SUNK)
+Final Position    : (180.94, 467.54)
+Escorts Destroyed : 0 / 4
+
+  Escort #1 at (966.45, 644.90) - ACTIVE
+  Escort #2 at (192.28, 805.51) - ACTIVE
+  Escort #3 at (589.12, 74.59) - ACTIVE
+  Escort #4 at (530.31, 166.19) - ACTIVE
