@@ -5,7 +5,6 @@
 #include "/home/zv/Desktop/Naval-Battle-Simulator/Part_1A/physics.h"
 #include "files.h"
 
-// function to find angle of a shot
 int find_elevation_angle(double distance, double velocity, double min_angle, double max_angle, double *angle_out) {
     if (velocity <= 0.0) return 0;
 
@@ -37,14 +36,12 @@ void run_battle_simulation(
     int b_sunk = 0;
     int end_step = steps;
 
-    // array for records of shots that get for escortships
     int has_fired[MAX_ESCORT_SHIPS] = {0};
 
     for (int step = 1; step <= steps; step++) {
         b->x = path[step - 1].x;
         b->y = path[step - 1].y;
 
-        // jamming condition
         if (jam_step > 0 && step >= jam_step && !is_jammed) {
             is_jammed = 1;
             b_min_angle = ((double)rand() / RAND_MAX) * 30.0;
@@ -53,7 +50,7 @@ void run_battle_simulation(
 
         log_step_info(log, step, steps, b->x, b->y, is_jammed, b_min_angle, jam_step);
 
-        // shots from escortship to battleship
+        // Shots from escort ships to battleship
         for (int i = 0; i < n_escorts; i++) {
             if (escorts[i].is_destroyed != 1 || has_fired[i]) continue;
 
@@ -61,7 +58,7 @@ void run_battle_simulation(
             double angle;
             if (find_elevation_angle(d, escorts[i].max_velocity, escorts[i].min_angle, escorts[i].max_angle, &angle)) {
                 has_fired[i] = 1;
-                cumulative_damage += escorts[i].impact_power; // calculating the impact
+                cumulative_damage += escorts[i].impact_power;
                 
                 double t = calculate_time_of_flight(escorts[i].max_velocity, angle);
                 log_attack_event(log, "Escort", escorts[i].id, "Battleship", 0, d, angle, t);
@@ -72,7 +69,6 @@ void run_battle_simulation(
                             escorts[i].impact_power, cumulative_damage * 100.0);
                 }
 
-                // if the damage more than 100% it will destroyed
                 if (cumulative_damage >= 1.0) {
                     b_sunk = 1;
                     b->is_destroyed = 0;
@@ -84,10 +80,9 @@ void run_battle_simulation(
             }
         }
 
-        // stop the battle step if the battleship is already sunk
         if (b_sunk) break;
 
-        // shots from battleship to escortships
+        // Shots from battleship to escort ships
         for (int i = 0; i < n_escorts; i++) {
             if (escorts[i].is_destroyed != 1) continue;
 
@@ -100,20 +95,28 @@ void run_battle_simulation(
             }
         }
 
-        // checking the live escortships count
         int escorts_alive = 0;
         for (int i = 0; i < n_escorts; i++) {
             if (escorts[i].is_destroyed == 1) escorts_alive++;
         }
         if (escorts_alive == 0) {
-            printf("\n🏆 All Escort ships destroyed at step %d!\n", step);
-            if (log) fprintf(log, "\n🏆 All Escort ships destroyed at step %d!\n", step);
+            printf("\n🎯 All Escort ships destroyed at step %d!\n", step);
+            if (log) fprintf(log, "\n🎯 All Escort ships destroyed at step %d!\n", step);
             end_step = step;
             break;
         }
     }
 
-    log_summary(log, b_sunk, cumulative_damage, end_step);
+    // calculating the destroyed escortships
+    int destroyed_count = 0;
+    for (int i = 0; i < n_escorts; i++) {
+        if (escorts[i].is_destroyed == 0) {
+            destroyed_count++;
+        }
+    }
+
+    // making the log_summary 
+    log_summary(log, b_sunk, cumulative_damage, end_step, destroyed_count, n_escorts);
 }
 
 void run_part1a_c(Battleship *b, EscortShip escorts[], int n, FILE *log) {
